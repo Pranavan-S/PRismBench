@@ -71,6 +71,11 @@ SYSTEM_INSTRUCTIONS = {
         ),
         "Non-risky": (
             "The PR has NO SZZ origin issues and NO observable failures attributed to it."
+        ),
+        "Ambiguous Label": (
+            "Use this ONLY when the SZZ origin issues exist but provide insufficient, "
+            "contradictory, or unclear evidence to confidently assign a specific risk type. "
+            "This indicates the case needs human review due to ambiguity in the failure description."
         )
     },
 
@@ -86,7 +91,9 @@ SYSTEM_INSTRUCTIONS = {
         "If SZZ origin issues exist, NEVER return 'Non-risky'.",
         "Select Performance Risk ONLY if the issue explicitly reports latency, throughput, memory, CPU, or scalability degradation.",
         "Multiple labels may be selected ONLY if the failures are independent and observable.",
-        "If one risk is a downstream consequence of another, select ONLY the primary symptom-level risk."
+        "If one risk is a downstream consequence of another, select ONLY the primary symptom-level risk.",
+        "Use 'Ambiguous Label' ONLY when you cannot confidently determine the risk type due to unclear or contradictory evidence in the SZZ issues.",
+        "Do NOT use 'Ambiguous Label' as a fallback or when you're unsure - make your best judgment based on available evidence."
     ],
 
     "anti_hallucination_rules": [

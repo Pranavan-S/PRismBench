@@ -80,6 +80,13 @@ def validate_llm_response(response: Dict, model_name: str, pr_number: int) -> Di
             print(f'WARNING: {model_name} for PR {pr_number} returned Non-risky with other labels, keeping only Non-risky')
             response['risk_type_labels'] = ['Non-risky']
             response['explanations'] = [e for e in response['explanations'] if e.get('label') == 'Non-risky']
+    
+    # Handle Ambiguous Label - it should be alone
+    if 'Ambiguous Label' in response['risk_type_labels']:
+        if len(response['risk_type_labels']) > 1:
+            print(f'WARNING: {model_name} for PR {pr_number} returned Ambiguous Label with other labels, keeping only Ambiguous Label')
+            response['risk_type_labels'] = ['Ambiguous Label']
+            response['explanations'] = [e for e in response['explanations'] if e.get('label') == 'Ambiguous Label']
     explanations = response['explanations']
     if not isinstance(explanations, list):
         print(f'WARNING: {model_name} explanations not a list, converting')

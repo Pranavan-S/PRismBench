@@ -29,6 +29,7 @@ DEFAULT_DROP_COLS: List[str] = DEFAULT_CATEG_COLS + [
     "linked_issue_has_security_keywords",
     "linked_issue_has_stack_trace",
     "pr_number",
+    "historical_features_computed",
 ]
 
 DEFAULT_NUMERIC_COLS: List[str] = [

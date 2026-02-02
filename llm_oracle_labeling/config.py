@@ -6,7 +6,8 @@ RISK_TYPE_LABELS = [
     'Security Risk',
     'Performance Risk',
     'Maintainability Risk',
-    'Non-risky'
+    'Non-risky',
+    'Ambiguous Label'
 ]
 
 # Pipeline settings

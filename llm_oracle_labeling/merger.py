@@ -12,7 +12,7 @@ def merge_model_results_and_apply_consensus(
     consensus_threshold: int = CONSENSUS_THRESHOLD
 ) -> Tuple[pd.DataFrame, pd.DataFrame]:
     print('\n' + '='*80)
-    print('📊 Merging results and applying consensus voting...')
+    print(' Merging results and applying consensus voting...')
     print('='*80)
     all_pr_numbers = set()
     for df in model_results.values():
@@ -58,6 +58,11 @@ def merge_model_results_and_apply_consensus(
             responses, 
             consensus_threshold
         )
+        
+        # If no consensus reached, assign "Ambiguous Label" for human review
+        if not agree:
+            agreed_labels = ('Ambiguous Label',)
+        
         out_row = {
             'pr_number': pr_number,
             'accepted': agree,
@@ -84,6 +89,14 @@ def merge_model_results_and_apply_consensus(
                         'rationale': exp.get('rationale', '')
                     }
             out_row['explanations'] = json.dumps(explanations_dict)
+        elif not agree:
+            # For ambiguous cases, provide explanation about the disagreement
+            out_row['explanations'] = json.dumps({
+                'Ambiguous Label': {
+                    'confidence': 0.0,
+                    'rationale': 'Models did not reach consensus threshold. Human review required.'
+                }
+            })
         else:
             out_row['explanations'] = '{}'
         if agree:
@@ -93,7 +106,7 @@ def merge_model_results_and_apply_consensus(
     accepted_df = pd.DataFrame(accepted_rows)
     human_df = pd.DataFrame(human_rows)
     total = len(accepted_df) + len(human_df)
-    print(f'✅ Consensus complete:')
+    print(f' Consensus complete:')
     if total > 0:
         print(f'   Accepted: {len(accepted_df)} ({len(accepted_df)/total*100:.1f}%)')
         print(f'   Need human review: {len(human_df)} ({len(human_df)/total*100:.1f}%)')
